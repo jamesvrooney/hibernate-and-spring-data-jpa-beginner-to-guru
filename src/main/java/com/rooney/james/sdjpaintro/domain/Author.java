@@ -14,12 +14,10 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @Builder
 @Entity
-public class Book {
+public class Author {
     @Id
     @GeneratedValue
     private Long id;
-    private String title;
-    private String isbn;
-    private String publisher;
-    private Long authorId;
+    private String firstName;
+    private String lastName;
 }
