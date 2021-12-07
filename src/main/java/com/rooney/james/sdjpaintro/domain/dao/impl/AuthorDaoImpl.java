@@ -21,9 +21,9 @@ public class AuthorDaoImpl implements AuthorDAO {
 
     @Override
     public Author getById(Long id) {
-        Connection connection;
-        Statement statement;
-        ResultSet resultSet;
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
 
         try {
             connection = dataSource.getConnection();
@@ -41,6 +41,22 @@ public class AuthorDaoImpl implements AuthorDAO {
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+
+                if (statement != null) {
+                    statement.close();
+                }
+
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
 
         return null;
