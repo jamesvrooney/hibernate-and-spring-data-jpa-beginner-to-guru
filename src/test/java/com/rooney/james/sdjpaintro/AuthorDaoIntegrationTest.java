@@ -45,6 +45,22 @@ public class AuthorDaoIntegrationTest {
     }
 
     @Test
+    void testDeleteAuthor() {
+        Author unsavedAuthor = Author.builder()
+                .firstName("Bob")
+                .lastName("Hope")
+                .build();
+
+        Author savedAuthor = authorDAO.saveNewAuthor(unsavedAuthor);
+
+        authorDAO.deleteAuthor(savedAuthor.getId());
+
+        Author deletedAuthor = authorDAO.getById(savedAuthor.getId());
+        
+        assertThat(deletedAuthor).isNull();
+    }
+
+    @Test
     void testSaveNewAuthor() {
         Author unsavedAuthor = Author.builder()
                 .firstName("Bob")
