@@ -56,7 +56,7 @@ public class AuthorDaoIntegrationTest {
         authorDAO.deleteAuthor(savedAuthor.getId());
 
         Author deletedAuthor = authorDAO.getById(savedAuthor.getId());
-        
+
         assertThat(deletedAuthor).isNull();
     }
 
