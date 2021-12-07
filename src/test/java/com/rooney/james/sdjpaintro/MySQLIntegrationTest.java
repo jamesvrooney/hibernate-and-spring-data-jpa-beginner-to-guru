@@ -2,6 +2,9 @@ package com.rooney.james.sdjpaintro;
 
 import com.rooney.james.sdjpaintro.domain.Book;
 import com.rooney.james.sdjpaintro.domain.BookNatural;
+import com.rooney.james.sdjpaintro.domain.composite.AuthorComposite;
+import com.rooney.james.sdjpaintro.domain.composite.NameId;
+import com.rooney.james.sdjpaintro.repository.AuthorCompositeRepository;
 import com.rooney.james.sdjpaintro.repository.BookNaturalRepository;
 import com.rooney.james.sdjpaintro.repository.BookRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +26,30 @@ public class MySQLIntegrationTest {
 
     @Autowired
     BookNaturalRepository bookNaturalRepository;
+
+    @Autowired
+    AuthorCompositeRepository authorCompositeRepository;
+
+    @Test
+    void testAuthorComposite() {
+        NameId namePrimaryKey = NameId.builder()
+                .firstName("James")
+                .lastName("Rooney")
+                .build();
+
+        AuthorComposite author = AuthorComposite.builder()
+                .firstName("James")
+                .lastName("Rooney")
+                .country("Ireland")
+                .build();
+
+        AuthorComposite savedAuthor = authorCompositeRepository.save(author);
+        assertThat(savedAuthor).isNotNull();
+
+        AuthorComposite fetchedAuthor = authorCompositeRepository.getById(namePrimaryKey);
+
+        assertThat(fetchedAuthor).isNotNull();
+    }
 
     @Test
     void testBookNatural() {
