@@ -1,6 +1,6 @@
 drop table if exists book_uuid;
 
-create table book_uuid  
+create table book_uuid
 (
     id        varbinary(16) not null primary key,
     isbn      varchar(255),

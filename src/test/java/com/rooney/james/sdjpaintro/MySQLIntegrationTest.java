@@ -1,6 +1,8 @@
 package com.rooney.james.sdjpaintro;
 
 import com.rooney.james.sdjpaintro.domain.Book;
+import com.rooney.james.sdjpaintro.domain.BookNatural;
+import com.rooney.james.sdjpaintro.repository.BookNaturalRepository;
 import com.rooney.james.sdjpaintro.repository.BookRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -18,6 +20,24 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class MySQLIntegrationTest {
     @Autowired
     BookRepository bookRepository;
+
+    @Autowired
+    BookNaturalRepository bookNaturalRepository;
+
+    @Test
+    void testBookNatural() {
+        BookNatural book = BookNatural.builder()
+                .title("My Book")
+                .isbn("8876")
+                .publisher("Rooney")
+                .build();
+
+        BookNatural savedBook = bookNaturalRepository.save(book);
+
+        BookNatural fetchedBook = bookNaturalRepository.getById(savedBook.getTitle());
+
+        assertThat(fetchedBook).isNotNull();
+    }
 
     @Test
     void testMySQL() {
