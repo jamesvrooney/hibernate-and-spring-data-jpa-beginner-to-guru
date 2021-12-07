@@ -27,14 +27,14 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.liquibase</groupId>
-			<artifactId>liquibase-core</artifactId>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<scope>test</scope>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>com.h2database</groupId>-->
+<!--			<artifactId>h2</artifactId>-->
+<!--			<scope>test</scope>-->
+<!--		</dependency>-->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
@@ -64,28 +64,6 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.liquibase</groupId>
-				<artifactId>liquibase-maven-plugin</artifactId>
-				<version>4.6.1</version>
-				<configuration>
-					<url>jdbc:mysql://127.0.0.1:3306/bookdb?useUnicode=true&amp;characterEncoding=UTF-8&amp;serverTimezone=UTC</url>
-					<username>bookadmin</username>
-					<password>password</password>
-					<outputChangeLogFile>changelog.xml</outputChangeLogFile>
-					<changeSetAuthor>jamesvrooney</changeSetAuthor>
-					<changelogSchemaName>bookdb</changelogSchemaName>
-<!--					<dependencies>-->
-<!--						<dependency>-->
-<!--							<groupId>mysql</groupId>-->
-<!--							<artifactId>mysql-connector-java</artifactId>-->
-<!--							<version>8.0.27</version>-->
-<!--						</dependency>-->
-<!--					</dependencies>-->
-<!--					<propertyFileWillOverride>true</propertyFileWillOverride>-->
-<!--					<propertyFile>target/classes/liquibase.properties</propertyFile>-->
 				</configuration>
 			</plugin>
 		</plugins>
