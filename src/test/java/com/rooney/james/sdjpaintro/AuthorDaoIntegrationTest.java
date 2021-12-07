@@ -26,21 +26,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class AuthorDaoIntegrationTest {
 
     @Autowired
-    AuthorRepository authorRepository;
-
-    @Autowired
     AuthorDAO authorDAO;
 
     @Test
     void testAuthorDao() {
-        Author author = Author.builder()
-                .firstName("James")
-                .lastName("Rooney")
-                .build();
-
-        Author savedAuthor = authorRepository.save(author);
-
-        Author fetchedAuthor = authorDAO.getById(savedAuthor.getId());
+        Author fetchedAuthor = authorDAO.getById(1L);
 
         assertThat(fetchedAuthor).isNotNull();
     }
