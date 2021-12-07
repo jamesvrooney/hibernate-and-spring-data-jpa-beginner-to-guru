@@ -3,8 +3,10 @@ package com.rooney.james.sdjpaintro;
 import com.rooney.james.sdjpaintro.domain.Book;
 import com.rooney.james.sdjpaintro.domain.BookNatural;
 import com.rooney.james.sdjpaintro.domain.composite.AuthorComposite;
+import com.rooney.james.sdjpaintro.domain.composite.AuthorEmbedded;
 import com.rooney.james.sdjpaintro.domain.composite.NameId;
 import com.rooney.james.sdjpaintro.repository.AuthorCompositeRepository;
+import com.rooney.james.sdjpaintro.repository.AuthorEmbeddedRepository;
 import com.rooney.james.sdjpaintro.repository.BookNaturalRepository;
 import com.rooney.james.sdjpaintro.repository.BookRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +31,29 @@ public class MySQLIntegrationTest {
 
     @Autowired
     AuthorCompositeRepository authorCompositeRepository;
+
+    @Autowired
+    AuthorEmbeddedRepository authorEmbeddedRepository;
+
+    @Test
+    void testAuthorEmbedded() {
+        NameId namePrimaryKey = NameId.builder()
+                .firstName("James")
+                .lastName("Rooney")
+                .build();
+
+        AuthorEmbedded author = AuthorEmbedded.builder()
+                .nameId(namePrimaryKey)
+                .country("Ireland")
+                .build();
+
+        AuthorEmbedded savedAuthor = authorEmbeddedRepository.save(author);
+        assertThat(savedAuthor).isNotNull();
+
+        AuthorEmbedded fetchedAuthor = authorEmbeddedRepository.getById(namePrimaryKey);
+
+        assertThat(fetchedAuthor).isNotNull();
+    }
 
     @Test
     void testAuthorComposite() {
