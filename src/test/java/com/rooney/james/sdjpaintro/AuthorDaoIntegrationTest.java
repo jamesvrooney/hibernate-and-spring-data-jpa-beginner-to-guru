@@ -29,6 +29,18 @@ public class AuthorDaoIntegrationTest {
     AuthorDAO authorDAO;
 
     @Test
+    void testSaveNewAuthor() {
+        Author unsavedAuthor = Author.builder()
+                .firstName("Bob")
+                .lastName("Hope")
+                .build();
+
+        Author savedAuthor = authorDAO.saveNewAuthor(unsavedAuthor);
+
+        assertThat(savedAuthor.getId()).isNotNull();
+    }
+
+    @Test
     void testAuthorDao() {
         Author fetchedAuthor = authorDAO.getById(1L);
 
