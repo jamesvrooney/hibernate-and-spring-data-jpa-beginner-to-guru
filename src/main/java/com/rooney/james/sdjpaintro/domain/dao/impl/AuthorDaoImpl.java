@@ -4,19 +4,21 @@ import com.rooney.james.sdjpaintro.domain.Author;
 import com.rooney.james.sdjpaintro.domain.dao.AuthorDAO;
 import com.rooney.james.sdjpaintro.domain.dao.impl.mapper.AuthorMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
-
-import javax.sql.DataSource;
-import java.sql.*;
 
 @RequiredArgsConstructor
 @Component
 public class AuthorDaoImpl implements AuthorDAO {
 
+    private final JdbcTemplate jdbcTemplate;
+
     @Override
     public Author getById(Long id) {
-        return null;
+        Author author = jdbcTemplate.queryForObject("SELECT * FROM author WHERE id = ?", getRowMapper(), id);
+
+        return author;
     }
 
     @Override
