@@ -12,165 +12,28 @@ import java.sql.*;
 @Component
 public class AuthorDaoImpl implements AuthorDAO {
 
-    private final DataSource dataSource;
-
     @Override
     public Author getById(Long id) {
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-
-        try {
-            connection = dataSource.getConnection();
-
-            preparedStatement = connection.prepareStatement("SELECT * FROM author WHERE id = ?");
-            preparedStatement.setLong(1, id);
-
-            resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next()) {
-                return getAuthorFromResultSet(resultSet);
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        } finally {
-            closeAll(resultSet, preparedStatement, connection);
-        }
-
         return null;
-    }
-
-    private Author getAuthorFromResultSet(ResultSet resultSet) throws SQLException {
-        Author author = new Author();
-
-        author.setId(resultSet.getLong("id"));
-        author.setFirstName(resultSet.getString("first_name"));
-        author.setLastName(resultSet.getString("last_name"));
-
-        return author;
     }
 
     @Override
     public Author getByName(String firstName, String lastName) {
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-
-        try {
-            connection = dataSource.getConnection();
-
-            preparedStatement = connection.prepareStatement("SELECT * FROM author WHERE first_name = ? AND last_name = ?");
-            preparedStatement.setString(1, firstName);
-            preparedStatement.setString(2, lastName);
-
-            resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next()) {
-                return getAuthorFromResultSet(resultSet);
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        } finally {
-            closeAll(resultSet, preparedStatement, connection);
-        }
-
         return null;
     }
 
     @Override
     public Author saveNewAuthor(Author newAuthor) {
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-
-        try {
-            connection = dataSource.getConnection();
-
-            preparedStatement = connection.prepareStatement("INSERT INTO author (first_name, last_name) VALUES (?, ?)");
-            preparedStatement.setString(1, newAuthor.getFirstName());
-            preparedStatement.setString(2, newAuthor.getLastName());
-
-            preparedStatement.execute();
-
-            Statement statement = connection.createStatement();
-
-            resultSet = statement.executeQuery("SELECT LAST_INSERT_ID()");
-
-            if (resultSet.next()) {
-                Long savedId = resultSet.getLong(1);
-
-                statement.close();
-
-                return getById(savedId);
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        } finally {
-            closeAll(resultSet, preparedStatement, connection);
-        }
-
         return null;
     }
 
     @Override
-    public Author updateAuthor(Author authorToUpdate) {
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-
-        try {
-            connection = dataSource.getConnection();
-
-            preparedStatement = connection.prepareStatement("UPDATE author SET first_name = ?, last_name = ? WHERE id = ?");
-            preparedStatement.setString(1, authorToUpdate.getFirstName());
-            preparedStatement.setString(2, authorToUpdate.getLastName());
-            preparedStatement.setLong(3, authorToUpdate.getId());
-
-            preparedStatement.execute();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        } finally {
-            closeAll(resultSet, preparedStatement, connection);
-        }
-
-        return getById(authorToUpdate.getId());
+    public Author updateAuthor(Author savedAuthor) {
+        return null;
     }
 
     @Override
-    public void deleteAuthor(Long authorId) {
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
+    public void deleteAuthor(Long id) {
 
-        try {
-            connection = dataSource.getConnection();
-
-            preparedStatement = connection.prepareStatement("DELETE FROM author WHERE id = ?");
-            preparedStatement.setLong(1, authorId);
-
-            preparedStatement.execute();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        } finally {
-            closeAll(resultSet, preparedStatement, connection);
-        }
-    }
-
-    private void closeAll(ResultSet resultSet, PreparedStatement preparedStatement, Connection connection) {
-        try {
-            if (resultSet != null) {
-                resultSet.close();
-            }
-
-            if (preparedStatement != null) {
-                preparedStatement.close();
-            }
-
-            if (connection != null) {
-                connection.close();
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
     }
 }

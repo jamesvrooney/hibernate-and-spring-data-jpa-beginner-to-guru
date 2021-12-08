@@ -25,16 +25,10 @@ public class BookDaoIntegrationTest {
 
     @Test
     void testUpdateBook() {
-        Author unsavedAuthor = Author.builder()
-                .firstName("James")
-                .lastName("Rooney")
-                .build();
-
         Book unsavedBook = Book.builder()
                 .title("My Book")
                 .isbn("3456")
                 .publisher("Rooney")
-                .author(unsavedAuthor)
                 .build();
 
         Book savedBook = bookDAO.saveNewBook(unsavedBook);
@@ -57,16 +51,10 @@ public class BookDaoIntegrationTest {
 
     @Test
     void testSaveNewBook() {
-        Author unsavedAuthor = Author.builder()
-                .firstName("James")
-                .lastName("Rooney")
-                .build();
-
         Book unsavedBook = Book.builder()
                 .title("My Book")
                 .isbn("3456")
                 .publisher("Rooney")
-                .author(unsavedAuthor)
                 .build();
 
         Book savedBook = bookDAO.saveNewBook(unsavedBook);

@@ -1,13 +1,7 @@
 package com.rooney.james.sdjpaintro;
 
 import com.rooney.james.sdjpaintro.domain.Author;
-import com.rooney.james.sdjpaintro.domain.Book;
-import com.rooney.james.sdjpaintro.domain.BookNatural;
-import com.rooney.james.sdjpaintro.domain.composite.AuthorComposite;
-import com.rooney.james.sdjpaintro.domain.composite.AuthorEmbedded;
-import com.rooney.james.sdjpaintro.domain.composite.NameId;
 import com.rooney.james.sdjpaintro.domain.dao.AuthorDAO;
-import com.rooney.james.sdjpaintro.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
