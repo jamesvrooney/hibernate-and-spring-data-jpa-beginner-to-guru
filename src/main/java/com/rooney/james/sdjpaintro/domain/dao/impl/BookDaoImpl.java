@@ -1,6 +1,7 @@
 package com.rooney.james.sdjpaintro.domain.dao.impl;
 
 import com.rooney.james.sdjpaintro.domain.Book;
+import com.rooney.james.sdjpaintro.domain.dao.AuthorDAO;
 import com.rooney.james.sdjpaintro.domain.dao.BookDAO;
 import com.rooney.james.sdjpaintro.domain.dao.BookDAO;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import java.sql.*;
 public class BookDaoImpl implements BookDAO {
 
     private final DataSource dataSource;
+    private final AuthorDAO authorDAO;
 
     @Override
     public Book getById(Long id) {
@@ -48,7 +50,7 @@ public class BookDaoImpl implements BookDAO {
         book.setTitle(resultSet.getString("title"));
         book.setIsbn(resultSet.getString("isbn"));
         book.setPublisher(resultSet.getString("publisher"));
-        book.setAuthorId(resultSet.getLong("author_id"));
+        book.setAuthor(authorDAO.getById(resultSet.getLong("author_id")));
 
         return book;
     }
@@ -91,8 +93,13 @@ public class BookDaoImpl implements BookDAO {
             preparedStatement = connection.prepareStatement("INSERT INTO book (title, publisher, author_id, isbn) VALUES (?, ?, ?, ?)");
             preparedStatement.setString(1, newBook.getTitle());
             preparedStatement.setString(2, newBook.getPublisher());
-            preparedStatement.setLong(3, newBook.getAuthorId());
             preparedStatement.setString(4, newBook.getIsbn());
+
+            if (newBook.getAuthor().getId() != null) {
+                preparedStatement.setLong(3, newBook.getAuthor().getId());
+            } else {
+                preparedStatement.setNull(3, -5);
+            }
 
             preparedStatement.execute();
 
@@ -129,8 +136,13 @@ public class BookDaoImpl implements BookDAO {
             preparedStatement.setString(1, bookToUpdate.getTitle());
             preparedStatement.setString(2, bookToUpdate.getPublisher());
             preparedStatement.setString(3, bookToUpdate.getIsbn());
-            preparedStatement.setLong(4, bookToUpdate.getAuthorId());
             preparedStatement.setLong(5, bookToUpdate.getId());
+
+            if (bookToUpdate.getAuthor() != null) {
+                preparedStatement.setLong(4, bookToUpdate.getAuthor().getId());
+            } else {
+                preparedStatement.setNull(4, -5);
+            }
 
             preparedStatement.execute();
         } catch (SQLException ex) {

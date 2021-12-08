@@ -1,5 +1,6 @@
 package com.rooney.james.sdjpaintro;
 
+import com.rooney.james.sdjpaintro.domain.Author;
 import com.rooney.james.sdjpaintro.domain.Book;
 import com.rooney.james.sdjpaintro.domain.dao.BookDAO;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 @ActiveProfiles("local")
-@ComponentScan(basePackages = {"com.rooney.james.sdjpaintro.domain.dao"})
+@ComponentScan(basePackages = {"com.rooney.james.sdjpaintro.domain"})
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class BookDaoIntegrationTest {
@@ -24,11 +25,16 @@ public class BookDaoIntegrationTest {
 
     @Test
     void testUpdateBook() {
+        Author unsavedAuthor = Author.builder()
+                .firstName("James")
+                .lastName("Rooney")
+                .build();
+
         Book unsavedBook = Book.builder()
                 .title("My Book")
                 .isbn("3456")
                 .publisher("Rooney")
-                .authorId(67L)
+                .author(unsavedAuthor)
                 .build();
 
         Book savedBook = bookDAO.saveNewBook(unsavedBook);
@@ -42,29 +48,25 @@ public class BookDaoIntegrationTest {
 
     @Test
     void testDeleteBook() {
-        Book unsavedBook = Book.builder()
-                .title("My Book")
-                .isbn("3456")
-                .publisher("Rooney")
-                .authorId(67L)
-                .build();
+        bookDAO.deleteBook(1L);
 
-        Book savedBook = bookDAO.saveNewBook(unsavedBook);
-
-        bookDAO.deleteBook(savedBook.getId());
-
-        Book deletedBook = bookDAO.getById(savedBook.getId());
+        Book deletedBook = bookDAO.getById(1L);
         
         assertThat(deletedBook).isNull();
     }
 
     @Test
     void testSaveNewBook() {
+        Author unsavedAuthor = Author.builder()
+                .firstName("James")
+                .lastName("Rooney")
+                .build();
+
         Book unsavedBook = Book.builder()
                 .title("My Book")
                 .isbn("3456")
                 .publisher("Rooney")
-                .authorId(67L)
+                .author(unsavedAuthor)
                 .build();
 
         Book savedBook = bookDAO.saveNewBook(unsavedBook);
@@ -74,7 +76,7 @@ public class BookDaoIntegrationTest {
 
     @Test
     void testBookDao() {
-        Book fetchedBook = bookDAO.getById(1L);
+        Book fetchedBook = bookDAO.getById(2L);
 
         assertThat(fetchedBook).isNotNull();
     }
