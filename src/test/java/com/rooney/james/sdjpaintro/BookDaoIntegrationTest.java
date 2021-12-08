@@ -9,9 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.ActiveProfiles;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Slf4j
 @ActiveProfiles("local")
@@ -44,9 +46,7 @@ public class BookDaoIntegrationTest {
     void testDeleteBook() {
         bookDAO.deleteBook(1L);
 
-        Book deletedBook = bookDAO.getById(1L);
-        
-        assertThat(deletedBook).isNull();
+        assertThrows(EmptyResultDataAccessException.class, () -> bookDAO.getById(1L));
     }
 
     @Test
@@ -63,14 +63,14 @@ public class BookDaoIntegrationTest {
     }
 
     @Test
-    void testBookDao() {
+    void testGetBookById() {
         Book fetchedBook = bookDAO.getById(2L);
 
         assertThat(fetchedBook).isNotNull();
     }
 
     @Test
-    void testGetBookByName() {
+    void testGetBookByTitle() {
         Book fetchedBook = bookDAO.getByTitle("Domain-Driven Design");
 
         assertThat(fetchedBook).isNotNull();
