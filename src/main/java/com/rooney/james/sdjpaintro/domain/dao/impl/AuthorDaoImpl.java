@@ -43,12 +43,19 @@ public class AuthorDaoImpl implements AuthorDAO {
 
     @Override
     public Author updateAuthor(Author savedAuthor) {
-        return null;
+        jdbcTemplate.update("UPDATE author SET first_name = ?, last_name = ? WHERE id = ?",
+                savedAuthor.getFirstName(),
+                savedAuthor.getLastName(),
+                savedAuthor.getId());
+
+        Author updatedAuthor = getById(savedAuthor.getId());
+
+        return updatedAuthor;
     }
 
     @Override
     public void deleteAuthor(Long id) {
-
+        jdbcTemplate.update("DELETE FROM author WHERE id = ?", id);
     }
 
     private RowMapper<Author> getRowMapper() {
