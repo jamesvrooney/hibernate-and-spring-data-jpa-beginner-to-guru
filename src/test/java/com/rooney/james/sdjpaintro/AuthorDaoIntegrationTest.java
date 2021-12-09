@@ -51,7 +51,9 @@ public class AuthorDaoIntegrationTest {
 
         authorDAO.deleteAuthor(savedAuthor.getId());
 
-        assertThrows(EmptyResultDataAccessException.class, () -> authorDAO.getById(savedAuthor.getId()));
+        Author deletedAuthor = authorDAO.getById(savedAuthor.getId());
+
+        assertThat(deletedAuthor).isNull();
     }
 
     @Test
