@@ -2,9 +2,11 @@ package com.rooney.james.sdjpaintro.domain.dao.impl;
 
 import com.rooney.james.sdjpaintro.domain.Author;
 import com.rooney.james.sdjpaintro.domain.dao.AuthorDAO;
+import com.rooney.james.sdjpaintro.domain.dao.impl.mapper.AuthorExtractor;
 import com.rooney.james.sdjpaintro.domain.dao.impl.mapper.AuthorMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +18,18 @@ public class AuthorDaoImpl implements AuthorDAO {
 
     @Override
     public Author getById(Long id) {
-        Author author = jdbcTemplate.queryForObject("SELECT * FROM author WHERE id = ?", getRowMapper(), id);
+        String sql = "select author.id,\n" +
+                "       first_name,\n" +
+                "       last_name,\n" +
+                "       book.id as book_id,\n" +
+                "       book.isbn,\n" +
+                "       book.publisher,\n" +
+                "       book.title\n" +
+                "from author left outer join book\n" +
+                "on author.id = book.author_id\n" +
+                "where author.id = ?";
+
+        Author author = jdbcTemplate.query(sql, getAuthorExtractor(), id);
 
         return author;
     }
@@ -60,5 +73,9 @@ public class AuthorDaoImpl implements AuthorDAO {
 
     private RowMapper<Author> getRowMapper() {
         return new AuthorMapper();
+    }
+
+    private ResultSetExtractor<Author> getAuthorExtractor() {
+        return new AuthorExtractor();
     }
 }

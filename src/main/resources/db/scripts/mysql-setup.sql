@@ -14,3 +14,15 @@ CREATE USER IF NOT EXISTS `bookuser`@`%` IDENTIFIED WITH mysql_native_password B
 GRANT SELECT, INSERT, UPDATE, DELETE, SHOW VIEW ON `bookdb2`.* TO `bookuser`@`%`;
 
 FLUSH PRIVILEGES;
+
+
+--select author.id,
+--       first_name,
+--       last_name,
+--       book.id as book_id,
+--       book.isbn,
+--       book.publisher,
+--       book.title
+--from author left outer join book
+--on author.id = book.author_id
+--where author.id = 1
