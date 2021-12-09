@@ -11,6 +11,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -23,6 +25,14 @@ public class AuthorDaoIntegrationTest {
 
     @Autowired
     AuthorDAO authorDAO;
+
+    @Test
+    void testGetAuthorsWithLastNameLike() {
+        List<Author> authors = authorDAO.getAuthorsByLastNameLike("Wall");
+
+        assertThat(authors).isNotNull();
+        assertThat(authors.size()).isGreaterThan(0);
+    }
 
     @Test
     void testUpdateAuthor() {
