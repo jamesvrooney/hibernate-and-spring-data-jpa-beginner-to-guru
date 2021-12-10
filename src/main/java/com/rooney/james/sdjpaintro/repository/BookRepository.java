@@ -23,6 +23,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Async
     Future<Book> queryByTitle(String title);
 
-    @Query("SELECT b FROM Book b WHERE b.title = ?1")
+    @Query("SELECT b FROM Book b WHERE b.title = :title")
     Book findBookByTitleWithQuery(String title);
 }
