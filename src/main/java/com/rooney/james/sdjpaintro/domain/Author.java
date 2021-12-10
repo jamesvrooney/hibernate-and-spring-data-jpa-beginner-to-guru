@@ -13,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @NamedQuery(name = "author_find_all", query = "From Author")
+@NamedQuery(name = "author_find_by_name", query = "From Author a WHERE a.firstName = :firstName AND a.lastName = :lastName")
 @Entity
 public class Author {
     @Id
