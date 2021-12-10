@@ -8,10 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.List;
+import javax.persistence.EntityNotFoundException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -27,68 +27,63 @@ public class AuthorDaoIntegrationTest {
     AuthorDAO authorDAO;
 
     @Test
-    void testGetAuthorsWithLastNameLike() {
-        List<Author> authors = authorDAO.getAuthorsByLastNameLike("Wall");
+    void testDeleteAuthor() {
+        Author author = new Author();
+        author.setFirstName("john");
+        author.setLastName("t");
 
-        assertThat(authors).isNotNull();
-        assertThat(authors.size()).isGreaterThan(0);
+        Author saved = authorDAO.saveNewAuthor(author);
+
+        authorDAO.deleteAuthorById(saved.getId());
+
+        assertThrows(JpaObjectRetrievalFailureException.class, () -> {
+            Author deleted = authorDAO.getById(saved.getId());
+        });
+
     }
 
     @Test
     void testUpdateAuthor() {
-        Author unsavedAuthor = Author.builder()
-                .firstName("Bob")
-                .lastName("Hope")
-                .build();
+        Author author = new Author();
+        author.setFirstName("john");
+        author.setLastName("t");
 
-        Author savedAuthor = authorDAO.saveNewAuthor(unsavedAuthor);
+        Author saved = authorDAO.saveNewAuthor(author);
 
-        savedAuthor.setLastName("NoHope");
+        saved.setLastName("Thompson");
+        Author updated = authorDAO.updateAuthor(saved);
 
-        Author updatedAuthor = authorDAO.updateAuthor(savedAuthor);
-
-        assertThat(updatedAuthor.getLastName()).isEqualTo("NoHope");
+        assertThat(updated.getLastName()).isEqualTo("Thompson");
     }
 
     @Test
-    void testDeleteAuthor() {
-        Author unsavedAuthor = Author.builder()
-                .firstName("Bob")
-                .lastName("Hope")
-                .build();
+    void testSaveAuthor() {
+        Author author = new Author();
+        author.setFirstName("John");
+        author.setLastName("Thompson");
+        Author saved = authorDAO.saveNewAuthor(author);
 
-        Author savedAuthor = authorDAO.saveNewAuthor(unsavedAuthor);
-
-        authorDAO.deleteAuthor(savedAuthor.getId());
-
-        Author deletedAuthor = authorDAO.getById(savedAuthor.getId());
-
-        assertThat(deletedAuthor).isNull();
-    }
-
-    @Test
-    void testSaveNewAuthor() {
-        Author unsavedAuthor = Author.builder()
-                .firstName("Bob")
-                .lastName("Hope")
-                .build();
-
-        Author savedAuthor = authorDAO.saveNewAuthor(unsavedAuthor);
-
-        assertThat(savedAuthor.getId()).isNotNull();
+        assertThat(saved).isNotNull();
     }
 
     @Test
     void testGetAuthorByName() {
-        Author fetchedAuthor = authorDAO.getByName("Craig", "Walls");
+        Author author = authorDAO.findAuthorByName("Craig", "Walls");
 
-        assertThat(fetchedAuthor).isNotNull();
+        assertThat(author).isNotNull();
     }
 
     @Test
-    void testGetAuthorById() {
-        Author fetchedAuthor = authorDAO.getById(1L);
+    void testGetAuthorByNameNotFound() {
+        assertThrows(EntityNotFoundException.class, () -> authorDAO.findAuthorByName("foo", "bar"));
+    }
 
-        assertThat(fetchedAuthor).isNotNull();
+    @Test
+    void testGetAuthor() {
+
+        Author author = authorDAO.getById(1L);
+
+        assertThat(author).isNotNull();
+
     }
 }
