@@ -39,7 +39,6 @@ public class AuthorDaoIntegrationTest {
         assertThrows(JpaObjectRetrievalFailureException.class, () -> {
             Author deleted = authorDAO.getById(saved.getId());
         });
-
     }
 
     @Test

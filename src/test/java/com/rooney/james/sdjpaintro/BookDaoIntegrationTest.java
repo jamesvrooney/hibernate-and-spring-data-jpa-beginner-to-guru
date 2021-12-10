@@ -11,11 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
 import org.springframework.test.context.ActiveProfiles;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Slf4j
 @ActiveProfiles("local")
@@ -28,18 +31,6 @@ public class BookDaoIntegrationTest {
     BookDao bookDao;
 
     @Test
-    void testFindBookByISBN() {
-        Book book = new Book();
-        book.setIsbn("1234" + RandomString.make());
-        book.setTitle("ISBN TEST");
-
-        Book saved = bookDao.saveNewBook(book);
-
-        Book fetched = bookDao.findByISBN(book.getIsbn());
-        assertThat(fetched).isNotNull();
-    }
-
-    @Test
     void testDeleteBook() {
         Book book = new Book();
         book.setIsbn("1234");
@@ -49,9 +40,9 @@ public class BookDaoIntegrationTest {
 
         bookDao.deleteBookById(saved.getId());
 
-        Book deleted = bookDao.getById(saved.getId());
-
-        assertThat(deleted).isNull();
+        assertThrows(JpaObjectRetrievalFailureException.class, () -> {
+            Book deleted = bookDao.getById(saved.getId());
+        });
     }
 
     @Test
@@ -96,6 +87,11 @@ public class BookDaoIntegrationTest {
         Book book = bookDao.findBookByTitle("Clean Code");
 
         assertThat(book).isNotNull();
+    }
+
+    @Test
+    void testGetBookByNameNotFound() {
+        assertThrows(EntityNotFoundException.class, () -> bookDao.findBookByTitle("Dirty Code"));
     }
 
     @Test

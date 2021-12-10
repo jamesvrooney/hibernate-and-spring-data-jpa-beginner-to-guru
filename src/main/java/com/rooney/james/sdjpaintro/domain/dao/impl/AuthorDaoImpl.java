@@ -8,8 +8,6 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
-import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Component
