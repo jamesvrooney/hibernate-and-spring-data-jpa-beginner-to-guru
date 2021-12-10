@@ -11,6 +11,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@NamedQuery(name = "Book.getBookByTitleNamed", query = "FROM Book b WHERE b.title = :title")
 @Entity
 public class Book {
     @Id
