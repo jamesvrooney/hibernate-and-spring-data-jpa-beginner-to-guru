@@ -2,6 +2,8 @@ package com.rooney.james.sdjpaintro.domain.dao;
 
 import com.rooney.james.sdjpaintro.domain.Book;
 
+import java.util.stream.Stream;
+
 public interface BookDao {
     Book getById(Long id);
 
