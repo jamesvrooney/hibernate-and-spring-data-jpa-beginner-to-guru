@@ -91,4 +91,12 @@ public class AuthorDaoIntegrationTest {
 
         assertThat(fetchedAuthor).isNotNull();
     }
+
+    @Test
+    void findAllAuthors() {
+        List<Author> authors = authorDAO.findAll();
+
+        assertThat(authors).isNotNull();
+        assertThat(authors.size()).isGreaterThan(0);
+    }
 }

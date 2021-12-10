@@ -12,6 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@NamedQuery(name = "author_find_all", query = "From Author")
 @Entity
 public class Author {
     @Id
