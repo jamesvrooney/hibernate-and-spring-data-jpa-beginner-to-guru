@@ -43,8 +43,7 @@ public class BookDaoImpl implements BookDao {
     public Book findBookByTitle(String title) {
         EntityManager em = getEntityManager();
 
-        TypedQuery<Book> query = em
-                .createQuery("SELECT b FROM Book b where b.title = :title", Book.class);
+        TypedQuery<Book> query = em.createQuery("SELECT b FROM Book b where b.title = :title", Book.class);
         query.setParameter("title", title);
 
         Book book = query.getSingleResult();
